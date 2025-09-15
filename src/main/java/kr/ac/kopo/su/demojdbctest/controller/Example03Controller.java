@@ -16,47 +16,83 @@ public class Example03Controller
     @Autowired
     MemberRepository03 repository;
 
+//    @GetMapping
+//    public String viewHomePage(Model model)
+//    {
+//        Iterable<Member> memberList = repository.selectMethod();
+//        model.addAttribute("members", memberList);
+//        return "viewPage03";
+//    }
     @GetMapping
     public String viewHomePage(Model model)
     {
         Iterable<Member> memberList = repository.selectMethod();
-        model.addAttribute("members", memberList);
+        model.addAttribute("memberList", memberList);
         return "viewPage03";
     }
-
     @GetMapping("/new")
     public String newMethod(Model model)
     {
-        Member member = new Member();
-        model.addAttribute("member", member);
+//        Member member = new Member();
+//        model.addAttribute("member", member);
+        model.addAttribute("member", new Member());
         return "viewPage03_";
     }
-
+//    @PostMapping("/insert")
+//    public String insertMethod(@ModelAttribute("member") Member member)
+//    {
+//        repository.save(member);
+//        return "redirect:/exam03";
+//    }
     @PostMapping("/insert")
     public String insertMethod(@ModelAttribute("member") Member member)
     {
-        repository.save(member);
-        return "redirect:/exam03";
-    }
-
-    @GetMapping("/delete/{id}")
-    public String deleteMethod(@PathVariable(name="id") int id, Model model) {
-        repository.deleteById(id);
+        repository.insertMethod(member.getName(),member.getAge(),member.getEmail());
         return "redirect:/exam03";
     }
 
     @GetMapping("/edit/{id}")
-    public String editMethod(@PathVariable(name="id") int id, Model model) {
-        Optional<Member> member = repository.findById(id);
+    public String editMethod(@PathVariable(name = "id") int id , Model model)
+    {
+        Member member = repository.selectMethodById(id);
         model.addAttribute("member", member);
-        return "/viewPage03__";
+        return "viewPage03__";
     }
 
     @PostMapping("/update")
-    public String updateMethod(@ModelAttribute Member member)
+    public String updateMethod(@ModelAttribute("member") Member member)
     {
-        repository.save(member);
+        repository.updateMethod(member.getName(),member.getAge(),member.getEmail(),member.getId());
         return "redirect:/exam03";
     }
+
+    @GetMapping("/delete/{id}")
+    public String deleteMethod(@PathVariable(name = "id") int id)
+    {
+        repository.deletetMethod(id);
+        return "redirect:/exam03";
+    }
+
+//    @GetMapping("/delete/{id}")
+//    public String deleteMethod(@PathVariable(name="id") int id, Model model) {
+//        repository.deleteById(id);
+//        return "redirect:/exam03";
+//    }
+//
+//    @GetMapping("/edit/{id}")
+//    public String editMethod(@PathVariable(name="id") int id, Model model) {
+//        Optional<Member> member = repository.findById(id);
+//        model.addAttribute("member", member);
+//        return "/viewPage03__";
+//    }
+//
+//    @PostMapping("/update")
+//    public String updateMethod(@ModelAttribute Member member)
+//    {
+//        repository.save(member);
+//        return "redirect:/exam03";
+//    }
+
+
 
 }
